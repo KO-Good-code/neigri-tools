@@ -12,7 +12,9 @@ module.exports = merge(config,{
   },
   devtool: 'cheap-module-source-map',
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
+    // port: 3000,
+    // host: '0.0.0.0'
   },
   resolve: {
     extensions: ['.js', '.jsx']
