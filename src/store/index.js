@@ -1,10 +1,10 @@
 
 import { Crdux } from '@/tools';
 const actions = {
-  setCount( { setState } , data){
+  setCount( setState, data){
     setState( {count: data})
   },
-  setKeys( { setState } , data){
+  setKeys( setState , data){
     setState( state =>{
       state.keys ++;
       return state

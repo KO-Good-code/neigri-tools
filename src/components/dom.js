@@ -13,9 +13,9 @@ function Dom (){
     <div >
       <p onClick={() => $dispath['setCount']({
     index: 1,
-    keys: {
-      index: 1
-    }
+    // keys: {
+    //   index: 1
+    // }
   })}>dom</p>
       <p>{$state.count.index}</p>
       <p>{$state.keys}</p>

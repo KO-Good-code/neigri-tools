@@ -3,13 +3,25 @@ import { deepEqual, deepCopy } from '@/tools'
 
 function setState(newState) {
 
-  // this.state = { ...this.state, ...newState }
-  // this.state = Object.assign(this.state, newState)
+  let _newState = {}
+  // 拷贝全局状态
+  const prevState = deepCopy(this.state);
+
+  // 函数模式下 如果不是以赋值的形式改变原有的某属性 比如计算  state++ 会触发多次 暂时无法优化
+  if ( typeof newState === 'function' ) {
+    _newState = newState(prevState)
+  } else {
+    _newState = {...prevState , ...newState}
+  }
+
+  if(deepEqual(_newState, this.state)){
+    return ;
+  }
 
   this.listeners.forEach( (listener) => {
-    // listener(this.state)
-    listener(newState)
+    listener(_newState)
   })
+
 
 }
 
@@ -23,11 +35,11 @@ function useCustom( mapState = []) {
 
   const latestState = useRef();
 
-  latestState.current = this.state
+  //  保存组件对应依赖的最新值
+  latestState.current = this.state;
 
-  //  对比传入的对象是否导出的对象
+  //  对比传入的对象是否含有对应的依赖对象
   const selector = (newState) => {
-    // let key = Object.keys(newState);
     const r = mapState.filter( i =>  newState[i]) 
     return r;
   }
@@ -35,21 +47,8 @@ function useCustom( mapState = []) {
   //  更新前检查
   const checkForUpdates = (newState) => {
 
-    let _newKeys = {};
-
-    let _newState = {}
-
-    // 函数模式下 如果不是以赋值的形式改变原有的某属性 比如计算  state++ 会触发多次 暂时无法优化
-    if ( typeof newState === 'function' ) {
-      const stateCopy = deepCopy(this.state)
-      _newState = newState(stateCopy)
-      _newKeys = selector(_newState)
-    } else {
-      _newKeys = selector(newState)
-      _newState = newState
-    }
-
-    let _new = {}
+    // 对应的依赖对象数组
+    let _newKeys = selector(newState);
 
     if( _newKeys.length < 1 ) {
       return;
@@ -59,12 +58,10 @@ function useCustom( mapState = []) {
 
     //  循环对比组件依赖变量的是否改变
     for ( let i = 0; i < _newKeys.length; i++ ) {
-      if ( _newState[_newKeys[i]] && latestState.current && deepEqual(_newState[_newKeys[i]], latestState.current[_newKeys[i]])) {
-        let deepFlag = deepEqual(_newState[_newKeys[i]], latestState.current[_newKeys[i]])
-        _r.push(deepFlag)
+      if ( newState[_newKeys[i]] && latestState.current && deepEqual(newState[_newKeys[i]], latestState.current[_newKeys[i]])) {
+        _r.push(true)
       }else {
         _r.push(false)
-        _new[_newKeys[i]] =  _newState[_newKeys[i]]
       }
     }
 
@@ -72,19 +69,16 @@ function useCustom( mapState = []) {
       return ;
     }
     
+    this.state = newState;
 
-    //  保存组件对应依赖的最新值
-    latestState.current = _new;
-
-    this.state = {...this.state ,..._newState};
-
+    // 触发react hook 的页面刷新
     newListener(s => s + 1)
   }
 
   useEffect(() => {
-    //组件加载执行
-    this.listeners.push(checkForUpdates);
 
+    //增加订阅函数
+    this.listeners.push(checkForUpdates);
 
     return () => {
       // 组件被销毁后 需要停止订阅
@@ -94,7 +88,6 @@ function useCustom( mapState = []) {
   },[])
 
   //  只输出组件依赖的全局状态
-
   let result = {};
 
   mapState.map(i => {
@@ -106,11 +99,12 @@ function useCustom( mapState = []) {
 }
 
 function associateActions(store, actions) {
+
   const associateActions = {}
 
   Object.keys(actions).forEach( key => {
     if (typeof actions[key] === 'function') {
-      associateActions[key] = actions[key].bind(null, store)
+      associateActions[key] = actions[key].bind(null, store.setState)
     }
     if(typeof actions[key] === 'object') {
       associateActions[key] = associateActions(store, actions[key])
@@ -120,7 +114,7 @@ function associateActions(store, actions) {
   return associateActions
 }
 
-const useGlobalHook = (initialState, actions) => {
+const useGlobalHook = (initialState = {}, actions) => {
 
   const store = { state: initialState, listeners: [] }
 

@@ -13,7 +13,7 @@ share.config({
 
 function App() { 
 
-  const [$state, $dispath] = store(['keys'])
+  const [$state, $dispath] = store()
 
   useEffect(() => {
     console.log('main')
