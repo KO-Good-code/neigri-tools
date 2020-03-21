@@ -1,14 +1,14 @@
 # neigri-tools
 neigri的前端工具库
 
-##Install
+## Install
 This project uses **node** and **npm** or **yarn**. Go check them out if you don't have them locally installed.
 ```cmd
 npm install neigri-tools
 
 yarn add neigri-tools
 ```
-###目录结构描述
+### 目录结构描述
 ├── Readme.md                   // help
 ├── app                         // 应用
 ├── config                      // 配置
@@ -21,7 +21,7 @@ yarn add neigri-tools
 │   ├── tools                   // 主要打包内容
 
 
-##Usage
+## Usage
 导出模块可使用 import, require, 目前工具库中有：
 1.获取url上参数, url目标链接, key详细的目标健值(可选) 没有就会将所有参数输出
 ```js
