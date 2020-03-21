@@ -6,7 +6,13 @@ function Dom (){
   const [$state, $dispath] = store(['keys', 'count'])
 
   useEffect(() => {
-    console.log(123)
+    let a = {
+      a:() => {
+        console.log(123)
+      }
+    }
+    let b = Object.assign({}, a)
+    console.log(b)
   })
 
   return (

@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react';
-import { deepEqual, deepCopy } from '@/tools'
+import { deepEqual, deepCopy } from '@/tools';
 
 function setState(newState) {
 
@@ -7,7 +7,6 @@ function setState(newState) {
   // 拷贝全局状态
   const prevState = deepCopy(this.state);
 
-  // 函数模式下 如果不是以赋值的形式改变原有的某属性 比如计算  state++ 会触发多次 暂时无法优化
   if ( typeof newState === 'function' ) {
     _newState = newState(prevState)
   } else {
@@ -16,12 +15,14 @@ function setState(newState) {
 
   if(deepEqual(_newState, this.state)){
     return ;
-  }
+  };
 
-  this.listeners.forEach( (listener) => {
+  const listeners = (this.listeners = this.nextListeners)
+
+  for (let i = 0; i < listeners.length; i++) {
+    const listener = listeners[i]
     listener(_newState)
-  })
-
+  }
 
 }
 
@@ -77,12 +78,24 @@ function useCustom( mapState = []) {
 
   useEffect(() => {
 
+    // 拷贝订阅之前的函数 主要防止订阅的函数中有取消订阅的行为
+    const ensureCanMutateNextListeners = () => {
+      console.log(this.listeners === this.nextListeners)
+      if (this.listeners === this.nextListeners) {
+        this.nextListeners = this.listeners.slice()
+      }
+    }
+
+    ensureCanMutateNextListeners()
+
     //增加订阅函数
-    this.listeners.push(checkForUpdates);
+    this.nextListeners.push(checkForUpdates);
 
     return () => {
+
+      ensureCanMutateNextListeners()
       // 组件被销毁后 需要停止订阅
-      this.listeners = this.listeners.filter( listener => listener !== checkForUpdates)
+      this.nextListeners = this.nextListeners.filter( listener => listener !== checkForUpdates)
     }
 
   },[])
@@ -116,7 +129,9 @@ function associateActions(store, actions) {
 
 const useGlobalHook = (initialState = {}, actions) => {
 
-  const store = { state: initialState, listeners: [] }
+  const store = { state: initialState, listeners: [] };
+
+  store.nextListeners = store.listeners;
 
   store.setState = setState.bind(store)
 

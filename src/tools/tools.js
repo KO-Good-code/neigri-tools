@@ -1,8 +1,9 @@
 
 
 /**
- * @param { variable } 查询链接上的参数
- * @param { url } 查询链接
+ * @param { string } variable 查询链接上的参数
+ * @param { string } url 查询链接
+ * @returns {string | Object}  
  */
 export const getUrlParam = (url ,variable) => {
   let query = url.split("?")[1];
@@ -22,10 +23,8 @@ export const getUrlParam = (url ,variable) => {
 // 过万处理
 export const million = (value) => {
   let num;
- if(value > 9999){//大于9999显示x.xx万
+ if(value > 9999){//大于9999显示x.x万
     num = (Math.floor(value/1000)/10) + '万';
- }else if( value < 9999){
-   num = '1万'
  }
  return num;
 }
@@ -134,7 +133,7 @@ export const share = {
 
 /**
 * 获取用户头像URL
-* @param {Number|Object} headInfo
+* @param {Object} Info
 * 说明：
 * 1、游戏登录态参数，取登录态中的headIndex
 * 2、密码登录取得的baseinfo，取baseinfo.RoleInfo
