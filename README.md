@@ -105,6 +105,8 @@ const newObj = deepCopy(obj)
 
 7.基于react hook 的全局状态管理器
 ```js
+// store.js
+
 import { Crdux } from 'neigri-tools'
 
 const actions = {
@@ -130,5 +132,16 @@ const store = {
 }
 
 export default Crdux(store, actions)
+
+```
+使用方式
+```js
+import Crdux from './store.js'
+
+const [store, actions] = Crdux(['count', 'keys'])
+
+const { count, keys } = store
+
+const { setCount, setKeys } = actions
 
 ```
