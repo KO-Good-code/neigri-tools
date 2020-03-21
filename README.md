@@ -102,3 +102,33 @@ import { deepCopy } from 'neigri-tools'
 const newObj = deepCopy(obj)
 
 ```
+
+7.基于react hook 的全局状态管理器
+```js
+import { Crdux } from 'neigri-tools'
+
+const actions = {
+  setCount( setState, data){
+    setState( {count: data})
+  },
+  setKeys( setState , data){
+    setState( state =>{
+      state.keys ++;
+      return state
+    } )
+  },
+};
+
+const store = {
+  count: {
+    index: 1,
+    keys: {
+      index: 1
+    }
+  },
+  keys: 1
+}
+
+export default Crdux(store, actions)
+
+```
