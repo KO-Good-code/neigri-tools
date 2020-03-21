@@ -43,15 +43,11 @@ module.exports = merge(config, {
     }),
     new UglifyJSPlugin({
       uglifyOptions: {
-        warning: "verbose",
-        ecma: 6,
-        beautify: false,
-        compress: false,
-        comments: false,
-        mangle: false,
-        toplevel: false,
-        keep_classnames: true,
-        keep_fnames: true
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log'] // 移除console
+        }
       }
     })
 ]

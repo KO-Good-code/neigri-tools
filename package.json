@@ -1,9 +1,10 @@
 {
   "name": "neigri-tools",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "README.md"
   ],
   "license": "MIT",
   "description": "neigri个人工具库",

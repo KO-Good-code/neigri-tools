@@ -1,5 +1,5 @@
 
-import { Crdux } from '@/tools';
+import { Crdux } from 'neigri-tools';
 const actions = {
   setCount( setState, data){
     setState( {count: data})
