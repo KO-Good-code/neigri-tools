@@ -5,7 +5,7 @@
  *  @param {JSON} options 请求连接上的参数
 */
 
-export const createAxios = (axios, callback, options = {}) => {
+export default createAxios = (axios, callback, options = {}) => {
   /**
    * 错误提示
    * @param {String} message 提示文字内容

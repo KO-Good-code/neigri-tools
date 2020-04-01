@@ -8,6 +8,7 @@ import {
 } from './tools';
 
 import Crdux from './useGlobalHook';
+import createAxios from './ajax';
 
 export {
   getUrlParam,
@@ -16,5 +17,6 @@ export {
   getAvatarUrl,
   deepEqual,
   Crdux,
-  deepCopy
+  deepCopy,
+  createAxios
 }
