@@ -8,7 +8,12 @@ import {
 } from './tools';
 
 import Crdux from './useGlobalHook';
+import OverLoading from '@/tools/overAni'
 import createAxios from './ajax';
+
+import useSetState from './hooks/useSetState'
+import useStorage from './hooks/useStorage'
+
 
 export {
   getUrlParam,
@@ -18,5 +23,8 @@ export {
   deepEqual,
   Crdux,
   deepCopy,
-  createAxios
+  createAxios,
+  useSetState,
+  useStorage,
+  OverLoading
 }
