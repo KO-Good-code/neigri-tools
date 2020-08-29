@@ -8,8 +8,8 @@ class Over{
     this.progress = document.createElement('div');
     this.progressbar = document.createElement('span');
     this.progressbartxt = document.createElement('span');
-    const ul = document.createElement('ul');
-    ul.innerHTML = `<li class="dot"></li><li class="dot"></li><li class="dot"></li><li class="dot"></li>`
+    const ul = document.createElement('div');
+    ul.classList.add('timer')
     this.body = document.body;
     this.dom.classList.add('over-model');
     this.progress.classList.add('over-model-progress');
